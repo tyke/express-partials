@@ -32,7 +32,7 @@ var path = require('path')
  *
  */
 
-module.exports = function(){
+module.exports = function(config_options){
   return function(req,res,next){
     // res.partial(view,options) -> res.render() (ignores any layouts)
     res.partial = res.render;
@@ -43,7 +43,7 @@ module.exports = function(){
     // layout support
     var _render = res.render.bind(res);
     res.render = function(name, options, fn){
-      var layout = options && options.layout;
+      var layout = config_options && config_options.layout
 
       // default layout
       if( layout === true || layout === undefined )
@@ -172,7 +172,7 @@ function resolveObjectName(view){
  */
 
 function lookup(root, view, ext){
-  var name = resolveObjectName(view);
+  var name = view.replace(ext,'')
 
   // Try _ prefix ex: ./views/_<name>.jade
   // taking precedence over the direct path
